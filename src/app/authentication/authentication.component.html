@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+  <!-- image bacground -->
+  <div class="image">
+    <img *ngIf="currentForm === 'login'" src="assets/wallpaper1.jpg" alt="Welcome" class="background-image">
+    <img *ngIf="currentForm === 'register'" src="assets/wallpaper2.jpg" alt="Welcome" class="background-image">
+    <div class="overlay-text">
+      <img src="assets/logo.png" alt="TravelX" class="logo">
+      <h2>Book Smarter, <br> travel better.</h2>
+    </div>
+  </div>
+
+  <div class="container">
+    <br><br>
+    <div class="form-section">
+      <h2>Welcome</h2>
+      <p>Log in or Register to manage your business travel needs</p><br>
+
+      <!-- Buttons -->
+      <div class="button-group">
+        <button (click)="toggleForm('login')" [class.active]="currentForm === 'login'">Login</button>
+        <button (click)="toggleForm('register')" [class.active]="currentForm === 'register'">Register</button>
+      </div>
+
+      <div class="form-container">
+        <!-- login form -->
+        <form *ngIf="currentForm === 'login'" class="auth-form" (ngSubmit)="login()">
+          <label style="align-items: left;">Username</label>
+          <input type="text" placeholder="ID/Email Address">
+          <label>Password</label>
+          <input type="password" placeholder="Password">
+          <a href="#">Forgot Password?</a>
+          <button class="button" type="submit" >Login</button>
+        </form>
+
+        <!-- Register form -->
+        <form *ngIf="currentForm === 'register'" class="auth-form">
+          <input type="text" placeholder="First Name">
+          <input type="text" placeholder="Last Name">
+          <input type="text" placeholder="ID/Passport Number">
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            name="phoneNumber" 
+            placeholder="Enter Phone Number"
+            class="form-control" 
+            [(ngModel)]="client.phone_Number"
+            required 
+            placeholder="Enter Phone Number"
+            pattern="^\d{10}$"
+            #phoneNumber="ngModel">
+          <input type="email" placeholder="Email">
+          <input type="password" placeholder="Password">
+          <input type="password" placeholder="Confirm Password">
+          <button class="button" type="submit" (click)="registerClient()">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+  
