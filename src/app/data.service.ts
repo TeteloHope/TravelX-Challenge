@@ -50,40 +50,29 @@ export class DataService {
 
   registerCustomer(client: Client, user: User): Observable<Client> {
     const userViewModel = {
-      emailaddress: client.email_Address,
+      emailaddress: client.email,
       password: user.password // Set the password to an empty string
     };
     const customerViewModel = {
-      First_Name: client.first_Name,
-      Last_Name: client.last_Name,
-      ID_Number: client.id_Number,
-      Email_Address: client.email_Address,
-      Phone_Number: client.phone_Number
+      First_Name: client.name,
+      Last_Name: client.surname,
+      ID_Number: client.idPassportNumber,
+      Email_Address: client.email,
+      Phone_Number: client.contact
     };
   
     const params = new HttpParams()
-      .set('First_Name', client.first_Name)
-      .set('Last_Name', client.last_Name)
-      .set('Date_of_Birth', client.id_Number)
-      .set('Email_Address', client.email_Address)
-      .set('Phone_Number', client.phone_Number);
+      .set('First_Name', client.name)
+      .set('Last_Name', client.surname)
+      .set('Date_of_Birth', client.idPassportNumber)
+      .set('Email_Address', client.email)
+      .set('Phone_Number', client.contact);
   
-    return this.httpClient.post<Client>(`${this.apiUrl}Authentication/RegisterClient`, userViewModel, { params });
+    return this.httpClient.post<Client>(`${this.apiUrl}register`, userViewModel, { params });
   }
 
   // Login a user
   login(user: User): Observable<any> {
     return this.httpClient.post<any>(`${this.apiUrl}login`, user, this.httpOptions);
-  }
-
-  //Retrieves all clients
-  getAllClients(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}Client/GetAllClientss`)
-    .pipe(map(result => result));
-  }
-
-  getAllClient(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}Client/GetAllClient`)
-    .pipe(map(result => result));
   }
 }

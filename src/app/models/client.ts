@@ -1,7 +1,7 @@
 export class Client{
-  first_Name: string = '';
-  last_Name: string = '';
-  email_Address: string = '';
-  phone_Number: string = '';
-  id_Number: string = '';
+  name: string = '';
+  surname: string = '';
+  email: string = '';
+  contact: string = '';
+  idPassportNumber: string = '';
 }
