@@ -1,23 +1,24 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, catchError, throwError, map, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from './models/user';
 import { Client } from './models/client';
+import { map, catchError, throwError } from 'rxjs';
+import { CommonModule } from '@angular/common';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
   private httpClient = inject(HttpClient);
-  apiUrl = 'http://localhost:7142/api/auth/'; // My API URL
+  apiUrl = 'http://localhost:7142/api/'; // Base API URL
 
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   };
-
-  //constructor(private httpClient: HttpClient) { }
 
   private getHttpOptions() {
     const token = localStorage.getItem('token');
@@ -45,45 +46,59 @@ export class DataService {
 
   // Register a new user
   registerUser(user: User): Observable<any> {
-    return this.httpClient.post<any>(`${this.apiUrl}register`, user, this.httpOptions);
+    return this.httpClient.post<any>(`${this.apiUrl}auth/register`, user, this.httpOptions);
   }
 
-  registerCustomer(client: Client, user: User): Observable<Client> {
-    const userViewModel = {
-      emailaddress: client.email_Address,
-      password: user.password // Set the password to an empty string
+  // Register a new client
+  registerCustomer(client: Client, user: User): Observable<any> {
+    const requestData = {
+      first_Name: client.first_Name,
+      last_Name: client.last_Name,
+      id_Number: client.id_Number,
+      email_Address: client.email_Address,
+      phone_Number: client.phone_Number,
+      password: user.password
     };
-    const customerViewModel = {
-      First_Name: client.first_Name,
-      Last_Name: client.last_Name,
-      ID_Number: client.id_Number,
-      Email_Address: client.email_Address,
-      Phone_Number: client.phone_Number
-    };
-  
-    const params = new HttpParams()
-      .set('First_Name', client.first_Name)
-      .set('Last_Name', client.last_Name)
-      .set('Date_of_Birth', client.id_Number)
-      .set('Email_Address', client.email_Address)
-      .set('Phone_Number', client.phone_Number);
-  
-    return this.httpClient.post<Client>(`${this.apiUrl}Authentication/RegisterClient`, userViewModel, { params });
+
+    return this.httpClient.post<any>(`${this.apiUrl}Authentication/RegisterClient`, requestData, this.httpOptions)
+      .pipe(
+        catchError(error => {
+          console.error('Error during registration:', error);
+          return throwError(() => new Error('Failed to register client'));
+        })
+      );
   }
 
   // Login a user
   login(user: User): Observable<any> {
-    return this.httpClient.post<any>(`${this.apiUrl}login`, user, this.httpOptions);
+    return this.httpClient.post<any>(`${this.apiUrl}auth/login`, user, this.httpOptions);
   }
 
-  //Retrieves all clients
-  getAllClients(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}Client/GetAllClientss`)
-    .pipe(map(result => result));
+  // Check if an email is already registered
+  checkEmailExists(email: string): Observable<boolean> {
+    return this.httpClient.get<boolean>(`${this.apiUrl}Authentication/CheckEmail?email=${email}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error checking email:', error);
+          return throwError(() => new Error('Failed to check email'));
+        })
+      );
   }
 
-  getAllClient(): Observable<any> {
-    return this.httpClient.get(`${this.apiUrl}Client/GetAllClient`)
-    .pipe(map(result => result));
+  // Retrieve all clients
+  getAllClients(): Observable<Client[]> {
+    return this.httpClient.get<Client[]>(`${this.apiUrl}Client/GetAllClients`)
+      .pipe(map(result => result));
+  }
+
+  // Retrieve a single client (if applicable)
+  getClientById(clientId: number): Observable<Client> {
+    return this.httpClient.get<Client>(`${this.apiUrl}Client/GetClient/${clientId}`)
+      .pipe(
+        catchError(error => {
+          console.error('Error fetching client:', error);
+          return throwError(() => new Error('Failed to retrieve client'));
+        })
+      );
   }
 }

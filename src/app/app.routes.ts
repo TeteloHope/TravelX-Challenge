@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication/authentication.component';
+import { CommonModule } from '@angular/common';
+
 
 // Define your routes to other components
 export const routes: Routes = [
