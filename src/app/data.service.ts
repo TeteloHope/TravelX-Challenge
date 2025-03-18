@@ -49,24 +49,27 @@ export class DataService {
     return this.httpClient.post<any>(`${this.apiUrl}auth/register`, user, this.httpOptions);
   }
 
-  // Register a new client
-  registerCustomer(client: Client, user: User): Observable<any> {
-    const requestData = {
-      first_Name: client.first_Name,
-      last_Name: client.last_Name,
-      id_Number: client.id_Number,
-      email_Address: client.email_Address,
-      phone_Number: client.phone_Number,
-      password: user.password
+  registerCustomer(client: Client, user: User): Observable<Client> {
+    const userViewModel = {
+      emailaddress: client.email,
+      password: user.password // Set the password to an empty string
     };
-
-    return this.httpClient.post<any>(`${this.apiUrl}Authentication/RegisterClient`, requestData, this.httpOptions)
-      .pipe(
-        catchError(error => {
-          console.error('Error during registration:', error);
-          return throwError(() => new Error('Failed to register client'));
-        })
-      );
+    const customerViewModel = {
+      First_Name: client.name,
+      Last_Name: client.surname,
+      ID_Number: client.idPassportNumber,
+      Email_Address: client.email,
+      Phone_Number: client.contact
+    };
+  
+    const params = new HttpParams()
+      .set('First_Name', client.name)
+      .set('Last_Name', client.surname)
+      .set('Date_of_Birth', client.idPassportNumber)
+      .set('Email_Address', client.email)
+      .set('Phone_Number', client.contact);
+  
+    return this.httpClient.post<Client>(`${this.apiUrl}register`, userViewModel, { params });
   }
 
   // Login a user
@@ -74,31 +77,14 @@ export class DataService {
     return this.httpClient.post<any>(`${this.apiUrl}auth/login`, user, this.httpOptions);
   }
 
-  // Check if an email is already registered
-  checkEmailExists(email: string): Observable<boolean> {
-    return this.httpClient.get<boolean>(`${this.apiUrl}Authentication/CheckEmail?email=${email}`)
-      .pipe(
-        catchError(error => {
-          console.error('Error checking email:', error);
-          return throwError(() => new Error('Failed to check email'));
-        })
-      );
+  //Retrieves all clients
+  getAllClients(): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}Client/GetAllClientss`)
+    .pipe(map(result => result));
   }
 
-  // Retrieve all clients
-  getAllClients(): Observable<Client[]> {
-    return this.httpClient.get<Client[]>(`${this.apiUrl}Client/GetAllClients`)
-      .pipe(map(result => result));
-  }
-
-  // Retrieve a single client (if applicable)
-  getClientById(clientId: number): Observable<Client> {
-    return this.httpClient.get<Client>(`${this.apiUrl}Client/GetClient/${clientId}`)
-      .pipe(
-        catchError(error => {
-          console.error('Error fetching client:', error);
-          return throwError(() => new Error('Failed to retrieve client'));
-        })
-      );
+  getAllClient(): Observable<any> {
+    return this.httpClient.get(`${this.apiUrl}Client/GetAllClient`)
+    .pipe(map(result => result));
   }
 }

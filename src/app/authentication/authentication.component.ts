@@ -3,6 +3,7 @@ import { DataService } from '../data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Client } from '../models/client';
 import { User } from '../models/user';
@@ -54,44 +55,24 @@ export class AuthenticationComponent implements OnInit {
   }
 
   registerClient(): void {
-    if (!this.client.first_Name || !this.client.last_Name || !this.client.email_Address ||
-        !this.user.password || !this.client.id_Number || !this.client.phone_Number) {
-      this.showSnackBar('Please fill out all required fields.');
-      return;
-    }
+    this.isLoading = true; 
 
-    if (this.user.password !== this.confirmPassword) {
-      this.showSnackBar('Passwords do not match.');
-      return;
-    }
-
-    this.isLoading = true;
-
-    // Check if the email exists in the backend before registering the client
-    this.dataService.checkEmailExists(this.client.email_Address).subscribe({
-      next: (exists) => {
-        if (exists) {
-          this.showSnackBar('Email already exists. Please use a different email.');
-          this.isLoading = false;
-        } else {
-          this.createClient();
-        }
-      },
-      error: () => {
-        this.showSnackBar('Error checking email existence.');
-        this.isLoading = false;
-      }
-    });
-  }
-
-  private createClient(): void {
     this.dataService.registerCustomer(this.client, this.user).subscribe({
-      next: () => {
-        this.showSnackBar('Registration Successful');
+      next: (response) => {
+        this.snackBar.open('Registration Successful', 'Ok', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
         this.router.navigate(['/login']);
       },
-      error: () => {
-        this.showSnackBar('Failed to register client. Please try again.');
+      error: (err) => {
+        console.error('Error registering client profile:', err);
+        this.snackBar.open('Failed to register client profile. Please try again.', 'OK', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
         this.isLoading = false;
       },
       complete: () => {
@@ -101,11 +82,6 @@ export class AuthenticationComponent implements OnInit {
   }
 
   login() {
-    if (!this.loginFormGroup.valid) {
-      this.showSnackBar('Username and Password are required');
-      return;
-    }
-
     this.isLoading = true;
     this.user = this.loginFormGroup.value;
 
@@ -117,22 +93,22 @@ export class AuthenticationComponent implements OnInit {
         localStorage.setItem('email', this.user.emailaddress);
         localStorage.setItem('Token', JSON.stringify(response.token));
 
-        this.showSnackBar('Successfully logged in');
-        this.router.navigate(['/dashboard']);
+        this.snackBar.open('Successfully logged in', 'OK', {
+          duration: 5000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
+
+        this.router.navigate(['/home']); // Redirect to home page for logic
       },
       error: () => {
         this.isLoading = false;
-        this.showSnackBar('Invalid login credentials');
+        this.snackBar.open('Invalid login credentials', 'OK', {
+          duration: 3000,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
       }
-    });
-  }
-
-  private showSnackBar(message: string) {
-    this.snackBar.open(message, 'OK', {
-      duration: 3000,
-      verticalPosition: 'top',
-      horizontalPosition: 'center',
-      panelClass: ['custom-snackbar']
     });
   }
 }

@@ -1,5 +1,5 @@
 body {
-    background-color: seagreen;
+    background-color: #00563B;
     margin: 0;
     display: flex;
     justify-content: center;
@@ -8,51 +8,37 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* background image Section */
 .image {
     width: 50%;
 }
 
 .background-image {
     width: 100%;
-    height: 130vh;
-    padding-right: 0;
-    flex: 1;
+    height: 100vh;
+    object-fit: cover; 
     display: flex;
     align-items: flex-end;
     justify-content: left;
     color: white;
+    box-shadow: inset 2px -2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
 }
 
 /* Main Container */
 .container {
+    flex: 1;
     display: flex;
+    /* flex-direction: column; */
+    max-width: 450px;
     width: 45%;
-    height: 95vh;
-    margin: 20px;
+    height: auto;
+    margin: 30px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
-
-
-/* Text over background image */
-.overlay-text {
-    position: absolute;
-    bottom: 0%;
-    left: 2%;
-    color: white;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-/* Logo */
-.logo {
-    width: 150px;
-    margin-bottom: 300px;
-}
-
 /* Form Section */
 .form-section {
     flex: 1;
@@ -62,15 +48,33 @@ body {
     padding: 20px;
     width: 50%;
     background: white;
-    height: 100%;
+    height: auto;
+    position: relative;
+}
+
+/* Text over background image */
+.overlay-text {
+    position: absolute;
+    bottom: -25%;
+    left: 2%;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Logo */
+.logo {
+    width: 250px;
+    margin-bottom: 350px;
 }
 
 /* Form Container */
 .form-container {
     width: 100%;
-    height: 100%;
+    height: auto;
+    padding-left: 120px;
     overflow: hidden;
-    position: relative;
+    position: fixed;
 }
 
 /* Authentication Form */
@@ -79,10 +83,9 @@ body {
     display: flex;
     flex-direction: column;
     background: white;
-    padding: 10px;
     border-radius: 8px;
-    width: 100%;
-    height: 100%;
+    width: 77%;
+    height: auto;
     font-weight: bold;
 }
 
@@ -94,15 +97,30 @@ body {
     flex-direction: column;
     margin-bottom: 10px;
     margin-top: 5px;
-    border: 2px solid #ccc;
-    border-radius: 20px;
-    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: auto;
+    height: 20px;
+    position: relative;
+}
+
+.auth-form a {
+    text-decoration: none;
+    color: #00563B;
+}
+
+/* Putting name and surnma einputs in the same row */
+.name-fields{
+    display: flex;
+    gap: 10px;
+    width: auto;
 }
 
 /* Buttons */
 .button-group {
     display: flex;
     margin-bottom: 20px;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
     width: auto;
 }
 
@@ -110,131 +128,83 @@ body {
     padding: 10px 20px;
     border: none;
     cursor: pointer;
-    transition: background 0.9s;
-    border-radius: 10px;
-    height: 50px;
+    transition: background 0.3s, box-shadow 0.3s;
+    border-radius: 15px;
+    height: 70px;
     width: 200px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .button-group .active {
-    background: seagreen;
+    background: #00563B;
     color: white;
+    border-radius: 15px 15px 15px 15px;
+    padding: 10px 50px;
+    box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.button-group button:not(.active) {
-    border: 2px solid seagreen;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+/* Inactive Login Button */
+.button-group button:first-child:not(.active) {
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 15px 0 0 18px;
+    box-shadow: inset 2px -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Inactive Register Button */
+.button-group button:last-child:not(.active) {
+    background-color: white;
+    color: black;
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 0 15px 18px 0;
+    box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .button {
-    width: 420px;
+    width: auto;
+    height: 50px;
     padding: 10px;
-    background: seagreen;
+    background: #00563B;
+    font-weight: bold;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
-    position: absolute;
     bottom: 1%;
 }
 
 .button:hover {
-    background: darkgreen;
+    background: #FF7818;
 }
 
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-} */
-
-/* .button-group {
+/* Loading overlay styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
     display: flex;
-    margin-bottom: 20px;
-}
-  
-.button-group button {
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    border-radius: 10px;
-    height: 50px;
-    width: 200px;
-}
-  
-.button-group .active {
-    background: seagreen;
-    color: white;
-}
-
-.button-group .inactive {
-    border: 2px solid #04AA6D;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-}
-
-.form-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
-    background: #ffffff;
+    z-index: 9999;
 }
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+  
+.loading-spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #00563B;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 1s linear infinite;
 }
-.auth-form {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+@keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
 }
-
-.auth-form input {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 20px;
-}
-
-.input input {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-radius: 10px;
-}
-
-.button {
-    width: 100%;
-    height: 50px;
-    padding: 10px;
-    background: seagreen;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-
-input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-} */
-
-/* .btn {
-    padding: 10px;
-    text-align: center;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-.btn:hover {
-    background-color: #0056b3;
-} */

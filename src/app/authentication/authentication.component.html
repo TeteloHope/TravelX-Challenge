@@ -18,7 +18,6 @@
   </div>
 
   <div class="container">
-    <br><br>
     <div class="form-section">
       <h2>Welcome</h2>
       <p>Log in or Register to manage your business travel needs</p><br>
@@ -29,40 +28,45 @@
         <button (click)="toggleForm('register')" [class.active]="currentForm === 'register'">Register</button>
       </div>
 
-      <div class="form-container">
-        <!-- login form -->
-        <form *ngIf="currentForm === 'login'" class="auth-form" (ngSubmit)="login()">
-          <label style="align-items: left;">Username</label>
-          <input type="text" placeholder="ID/Email Address">
-          <label>Password</label>
-          <input type="password" placeholder="Password">
-          <a href="#">Forgot Password?</a>
-          <button class="button" type="submit" >Login</button>
-        </form>
+      <!-- login form -->
+      <form *ngIf="currentForm === 'login'" class="auth-form" (ngSubmit)="login()">
+        <label style="align-items: left;">Username</label>
+        <input type="text" placeholder="ID/Email Address"><br>
+        <label>Password</label>
+        <input type="password" placeholder="Password">
+        <a href="#">Forgot Password?</a><br><br><br>
+        <button class="button" type="submit" >Login</button>
+      </form>
 
-        <!-- Register form -->
-        <form *ngIf="currentForm === 'register'" class="auth-form">
-          <input type="text" placeholder="First Name">
-          <input type="text" placeholder="Last Name">
-          <input type="text" placeholder="ID/Passport Number">
-          <input 
-            type="tel" 
-            id="phoneNumber" 
-            name="phoneNumber" 
-            placeholder="Enter Phone Number"
-            class="form-control" 
-            [(ngModel)]="client.phone_Number"
-            required 
-            placeholder="Enter Phone Number"
-            pattern="^\d{10}$"
-            #phoneNumber="ngModel">
-          <input type="email" placeholder="Email">
-          <input type="password" placeholder="Password">
-          <input type="password" placeholder="Confirm Password">
-          <button class="button" type="submit" (click)="registerClient()">Register</button>
-        </form>
-      </div>
+      <!-- Register form -->
+      <form *ngIf="currentForm === 'register'" class="auth-form">
+        <div class="name-fields">
+          <input [(ngModel)]="client.name" name="name" type="text" placeholder="First Name">
+          <input [(ngModel)]="client.surname" name="surname" type="text" placeholder="Last Name">
+        </div>
+        <input [(ngModel)]="client.idPassportNumber" name="idPassportNumber" type="text" placeholder="ID/Passport Number">
+        <input 
+          type="tel" 
+          id="phoneNumber" 
+          name="phoneNumber" 
+          placeholder="Enter Phone Number"
+          class="form-control" 
+          [(ngModel)]="client.contact"
+          required 
+          placeholder="Enter Phone Number"
+          pattern="^\d{10}$"
+          #phoneNumber="ngModel">
+        <input [(ngModel)]="client.email" name="email" type="email" placeholder="Email">
+        <input [(ngModel)]="user.password" name="password" type="password" placeholder="Password">
+        <input type="password" placeholder="Confirm Password">
+        <mat-checkbox name="termsAndConditions">I agree to the <a>Terms and Conditions</a></mat-checkbox><br>
+        <button class="button" type="submit" (click)="registerClient()">Register</button>
+      </form>
     </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner"></div>
   </div>
 </body>
   
